@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:music_concept_ui_animation/models/music.dart';
 
 import '../constants.dart';
 
+import '../musicPlayerScreen/music_player_screen.dart';
 import './widgets/music_card.dart';
+import '../models/music.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int currentPage = 0;
   double currentPageOffset = 0.0;
+  double dragOffset = 0.0;
 
   @override
   void initState() {
@@ -104,10 +106,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.only(
                             right: defaultPadding, top: 2 * defaultPadding),
                         child: GestureDetector(
+                          onVerticalDragStart: (details) {
+                            // print(details.localPosition);
+                          },
                           onVerticalDragUpdate: (details) {
-                            print(details);
-
-                            if (details.primaryDelta! > 1.5) {}
+                            // print(details.delta);
+                          },
+                          onVerticalDragEnd: (details) {
+                            // print(details.primaryVelocity);
+                          },
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MusicPlayerScreen(),
+                              ),
+                            );
                           },
                           child: MusicCard(
                             currentPage: currentPage,
@@ -126,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Positioned(
-              bottom: 0,
+              bottom: 20,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -143,97 +157,100 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 0.25 * defaultPadding),
-                  SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: const [
-                        SizedBox(width: defaultPadding),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10.0),
-                          child: Chip(
-                            label: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 4.0,
-                                horizontal: 6.0,
-                              ),
-                              child: Text(
-                                "Indie Rock",
-                                style: TextStyle(
-                                  color: primaryColor,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
+                  SizedBox(
+                    width: _size.width,
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: const [
+                          SizedBox(width: defaultPadding),
+                          Padding(
+                            padding: EdgeInsets.only(right: 10.0),
+                            child: Chip(
+                              label: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 4.0,
+                                  horizontal: 6.0,
+                                ),
+                                child: Text(
+                                  "Indie Rock",
+                                  style: TextStyle(
+                                    color: primaryColor,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
+                              backgroundColor: secondaryColor,
                             ),
-                            backgroundColor: secondaryColor,
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10.0),
-                          child: Chip(
-                            label: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 4.0,
-                                horizontal: 6.0,
-                              ),
-                              child: Text(
-                                "Pop",
-                                style: TextStyle(
-                                  color: secondaryColor,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: EdgeInsets.only(right: 10.0),
+                            child: Chip(
+                              label: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 4.0,
+                                  horizontal: 6.0,
+                                ),
+                                child: Text(
+                                  "Pop",
+                                  style: TextStyle(
+                                    color: secondaryColor,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
+                              backgroundColor: primaryColor,
+                              side: BorderSide(color: secondaryColor),
                             ),
-                            backgroundColor: primaryColor,
-                            side: BorderSide(color: secondaryColor),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 8.0),
-                          child: Chip(
-                            label: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 4.0,
-                                horizontal: 6.0,
-                              ),
-                              child: Text(
-                                "Reggage",
-                                style: TextStyle(
-                                  color: secondaryColor,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: Chip(
+                              label: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 4.0,
+                                  horizontal: 6.0,
+                                ),
+                                child: Text(
+                                  "Reggage",
+                                  style: TextStyle(
+                                    color: secondaryColor,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
+                              backgroundColor: primaryColor,
+                              side: BorderSide(color: secondaryColor),
                             ),
-                            backgroundColor: primaryColor,
-                            side: BorderSide(color: secondaryColor),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 8.0),
-                          child: Chip(
-                            label: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 4.0,
-                                horizontal: 6.0,
-                              ),
-                              child: Text(
-                                "Melody",
-                                style: TextStyle(
-                                  color: secondaryColor,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: Chip(
+                              label: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 4.0,
+                                  horizontal: 6.0,
+                                ),
+                                child: Text(
+                                  "Melody",
+                                  style: TextStyle(
+                                    color: secondaryColor,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
+                              backgroundColor: primaryColor,
+                              side: BorderSide(color: secondaryColor),
                             ),
-                            backgroundColor: primaryColor,
-                            side: BorderSide(color: secondaryColor),
                           ),
-                        ),
-                        SizedBox(width: defaultPadding)
-                      ],
+                          SizedBox(width: defaultPadding)
+                        ],
+                      ),
                     ),
                   ),
                 ],
