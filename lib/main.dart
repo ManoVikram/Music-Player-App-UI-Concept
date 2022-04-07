@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import './homeScreen/home_screen.dart';
+import 'musicPlayerScreen/music_player_screen.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -29,8 +30,8 @@ class MusicConceptUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: HomeScreen(),
+    return const Scaffold(
+      body: MusicPlayerScreen(),
     );
   }
 }

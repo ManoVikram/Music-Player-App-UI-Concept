@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vector_math/vector_math_64.dart' as vector;
 
 import '../constants.dart';
+
+import './widgets/player_audio_card.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   const MusicPlayerScreen({Key? key}) : super(key: key);
@@ -12,8 +14,43 @@ class MusicPlayerScreen extends StatefulWidget {
   State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
 }
 
-class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
+class _MusicPlayerScreenState extends State<MusicPlayerScreen>
+    with SingleTickerProviderStateMixin {
   double sliderValue = 0.0;
+
+  late final AnimationController _animationController;
+
+  late final Animation rotationAnimation;
+  late final Animation detailsTranslateAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    );
+
+    rotationAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: const Interval(0.0, 0.7),
+    );
+
+    detailsTranslateAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: const Interval(
+        0.4,
+        1.0,
+        curve: Curves.decelerate,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,21 +123,30 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
               ),
             ),
             const SizedBox(height: defaultPadding),
-            Container(
-              height: _size.width - defaultPadding,
-              width: _size.width - defaultPadding,
-              padding: const EdgeInsets.all(0.0),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child: Image.asset(
-                  "lib/assets/images/05.jpg",
-                  fit: BoxFit.cover,
-                ),
-              ),
+            GestureDetector(
+              onTap: () {
+                if (!_animationController.isCompleted) {
+                  _animationController.forward();
+                } else {
+                  _animationController.reverse();
+                }
+              },
+              child: AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) {
+                    return Transform(
+                      transform: Matrix4.identity()
+                        ..setEntry(3, 2, 0.001)
+                        ..rotateY(
+                            rotationAnimation.value * vector.radians(180)),
+                      alignment: Alignment.center,
+                      child: PlayerAudioCard(
+                        size: _size,
+                        animationController: _animationController,
+                        detailsTranslateAnimation: detailsTranslateAnimation,
+                      ),
+                    );
+                  }),
             ),
             const SizedBox(height: defaultPadding),
             const Text(
