@@ -119,7 +119,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MusicPlayerScreen(),
+                                builder: (context) => MusicPlayerScreen(
+                                  artist: allMusic[index].artist,
+                                  coverImage: allMusic[index].coverImage,
+                                  title: allMusic[index].title,
+                                ),
                               ),
                             );
                           },

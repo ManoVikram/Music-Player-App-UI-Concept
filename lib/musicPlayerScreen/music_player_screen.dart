@@ -8,7 +8,16 @@ import '../constants.dart';
 import './widgets/player_audio_card.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
-  const MusicPlayerScreen({Key? key}) : super(key: key);
+  const MusicPlayerScreen({
+    Key? key,
+    required this.coverImage,
+    required this.title,
+    required this.artist,
+  }) : super(key: key);
+
+  final String coverImage;
+  final String title;
+  final String artist;
 
   @override
   State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
@@ -106,20 +115,26 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
           children: [
             Padding(
               padding: const EdgeInsets.only(top: defaultPadding * 0.5),
-              child: Row(
-                children: const [
-                  Icon(
-                    Icons.arrow_back_ios,
-                    size: 16.0,
-                  ),
-                  Text(
-                    "BACK",
-                    style: TextStyle(
-                      fontSize: 13.0,
-                      fontWeight: FontWeight.bold,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(
+                      Icons.arrow_back_ios,
+                      size: 16.0,
                     ),
-                  ),
-                ],
+                    Text(
+                      "BACK",
+                      style: TextStyle(
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: defaultPadding),
@@ -144,31 +159,32 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
                         size: _size,
                         animationController: _animationController,
                         detailsTranslateAnimation: detailsTranslateAnimation,
+                        coverImage: widget.coverImage,
                       ),
                     );
                   }),
             ),
             const SizedBox(height: defaultPadding),
-            const Text(
-              "Blue",
-              style: TextStyle(
+            Text(
+              widget.title,
+              style: const TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: const [
+              children: [
                 Expanded(
                   child: Text(
-                    "Jonas Blue",
-                    style: TextStyle(
+                    widget.artist,
+                    style: const TextStyle(
                       fontSize: 20.0,
                       height: 0.9,
                     ),
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.favorite_border,
                   size: 28.0,
                 ),
