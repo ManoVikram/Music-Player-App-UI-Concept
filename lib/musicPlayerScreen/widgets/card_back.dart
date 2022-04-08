@@ -9,11 +9,13 @@ class CardBack extends StatelessWidget {
     Key? key,
     required Size size,
     required this.detailsTranslateAnimation,
+    required this.title,
   })  : _size = size,
         super(key: key);
 
   final Size _size;
   final Animation detailsTranslateAnimation;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +36,9 @@ class CardBack extends StatelessWidget {
               (1 - detailsTranslateAnimation.value) * (_size.width - 200.0)),
           child: Column(
             children: [
-              const Text(
-                "Perfect Strangers",
-                style: TextStyle(
+              Text(
+                title,
+                style:const TextStyle(
                   fontSize: 28.0,
                   fontWeight: FontWeight.bold,
                 ),

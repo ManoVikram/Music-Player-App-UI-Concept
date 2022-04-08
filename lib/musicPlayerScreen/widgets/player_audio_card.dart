@@ -11,6 +11,7 @@ class PlayerAudioCard extends StatelessWidget {
     required Size size,
     required AnimationController animationController,
     required this.detailsTranslateAnimation,
+    required this.title,
     required this.coverImage,
   })  : _size = size,
         _animationController = animationController,
@@ -19,6 +20,7 @@ class PlayerAudioCard extends StatelessWidget {
   final Size _size;
   final AnimationController _animationController;
   final Animation detailsTranslateAnimation;
+  final String title;
   final String coverImage;
 
   @override
@@ -53,6 +55,7 @@ class PlayerAudioCard extends StatelessWidget {
           ? CardBack(
               size: _size,
               detailsTranslateAnimation: detailsTranslateAnimation,
+              title: title,
             )
           : CardFront(
               size: _size,

@@ -108,195 +108,199 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
         elevation: 0.0,
         backgroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: defaultPadding * 0.5),
-              child: InkWell(
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: defaultPadding * 0.5),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(
+                        Icons.arrow_back_ios,
+                        size: 16.0,
+                      ),
+                      Text(
+                        "BACK",
+                        style: TextStyle(
+                          fontSize: 13.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: defaultPadding),
+              GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  if (!_animationController.isCompleted) {
+                    _animationController.forward();
+                  } else {
+                    _animationController.reverse();
+                  }
                 },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(
-                      Icons.arrow_back_ios,
-                      size: 16.0,
-                    ),
-                    Text(
-                      "BACK",
-                      style: TextStyle(
-                        fontSize: 13.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                child: AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (context, child) {
+                      return Transform(
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(
+                              rotationAnimation.value * vector.radians(180)),
+                        alignment: Alignment.center,
+                        child: PlayerAudioCard(
+                          size: _size,
+                          animationController: _animationController,
+                          detailsTranslateAnimation: detailsTranslateAnimation,
+                          title: widget.title,
+                          coverImage: widget.coverImage,
+                        ),
+                      );
+                    }),
+              ),
+              const SizedBox(height: defaultPadding),
+              Text(
+                widget.title,
+                style: const TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            const SizedBox(height: defaultPadding),
-            GestureDetector(
-              onTap: () {
-                if (!_animationController.isCompleted) {
-                  _animationController.forward();
-                } else {
-                  _animationController.reverse();
-                }
-              },
-              child: AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (context, child) {
-                    return Transform(
-                      transform: Matrix4.identity()
-                        ..setEntry(3, 2, 0.001)
-                        ..rotateY(
-                            rotationAnimation.value * vector.radians(180)),
-                      alignment: Alignment.center,
-                      child: PlayerAudioCard(
-                        size: _size,
-                        animationController: _animationController,
-                        detailsTranslateAnimation: detailsTranslateAnimation,
-                        coverImage: widget.coverImage,
-                      ),
-                    );
-                  }),
-            ),
-            const SizedBox(height: defaultPadding),
-            Text(
-              widget.title,
-              style: const TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Text(
-                    widget.artist,
-                    style: const TextStyle(
-                      fontSize: 20.0,
-                      height: 0.9,
-                    ),
-                  ),
-                ),
-                const Icon(
-                  Icons.favorite_border,
-                  size: 28.0,
-                ),
-              ],
-            ),
-            /* SliderTheme(
-              data: const SliderThemeData(
-                trackHeight: 2.0,
-              ),
-              child: Slider(
-                onChanged: (value) {
-                  setState(() {
-                    sliderValue = value;
-                  });
-                },
-                value: sliderValue,
-                thumbColor: Colors.amber,
-                activeColor: Colors.grey[800],
-                inactiveColor: primaryColor.withOpacity(0.5),
-              ),
-            ), */
-            const SizedBox(height: defaultPadding),
-            Stack(
-              alignment: Alignment.centerLeft,
-              children: [
-                Container(
-                  height: 2.0,
-                  width: _size.width - defaultPadding,
-                  decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.5),
-                  ),
-                ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      height: 18.0,
-                      width: 18.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey[800],
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.artist,
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                        height: 0.9,
                       ),
                     ),
-                    Container(
-                      height: 10.0,
-                      width: 10.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.amber[300],
-                      ),
+                  ),
+                  const Icon(
+                    Icons.favorite_border,
+                    size: 28.0,
+                  ),
+                ],
+              ),
+              /* SliderTheme(
+                data: const SliderThemeData(
+                  trackHeight: 2.0,
+                ),
+                child: Slider(
+                  onChanged: (value) {
+                    setState(() {
+                      sliderValue = value;
+                    });
+                  },
+                  value: sliderValue,
+                  thumbColor: Colors.amber,
+                  activeColor: Colors.grey[800],
+                  inactiveColor: primaryColor.withOpacity(0.5),
+                ),
+              ), */
+              const SizedBox(height: defaultPadding),
+              Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  Container(
+                    height: 2.0,
+                    width: _size.width - defaultPadding,
+                    decoration: BoxDecoration(
+                      color: primaryColor.withOpacity(0.5),
                     ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: defaultPadding * 0.3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  "00:00",
-                  style: TextStyle(
-                    fontSize: 18.0,
                   ),
-                ),
-                Text(
-                  "05:24",
-                  style: TextStyle(
-                    fontSize: 18.0,
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        height: 18.0,
+                        width: 18.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      Container(
+                        height: 10.0,
+                        width: 10.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.amber[300],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Icon(
-                  Icons.repeat,
-                  color: secondaryColor,
-                  size: 30.0,
-                ),
-                const Icon(
-                  Icons.fast_rewind_rounded,
-                  color: Colors.grey,
-                  size: 40.0,
-                ),
-                Container(
-                  height: 80.0,
-                  width: 80.0,
-                  decoration: const BoxDecoration(
+                ],
+              ),
+              const SizedBox(height: defaultPadding * 0.3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    "00:00",
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  Text(
+                    "05:24",
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Icon(
+                    Icons.repeat,
                     color: secondaryColor,
-                    shape: BoxShape.circle,
+                    size: 30.0,
                   ),
-                  child: const Icon(
-                    Icons.pause_rounded,
-                    color: Colors.white,
-                    size: 56.0,
+                  const Icon(
+                    Icons.fast_rewind_rounded,
+                    color: Colors.grey,
+                    size: 40.0,
                   ),
-                ),
-                const Icon(
-                  Icons.fast_forward_rounded,
-                  color: Colors.grey,
-                  size: 40.0,
-                ),
-                const Icon(
-                  CupertinoIcons.shuffle,
-                  color: secondaryColor,
-                  size: 30.0,
-                ),
-              ],
-            ),
-          ],
+                  Container(
+                    height: 80.0,
+                    width: 80.0,
+                    decoration: const BoxDecoration(
+                      color: secondaryColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.pause_rounded,
+                      color: Colors.white,
+                      size: 56.0,
+                    ),
+                  ),
+                  const Icon(
+                    Icons.fast_forward_rounded,
+                    color: Colors.grey,
+                    size: 40.0,
+                  ),
+                  const Icon(
+                    CupertinoIcons.shuffle,
+                    color: secondaryColor,
+                    size: 30.0,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
